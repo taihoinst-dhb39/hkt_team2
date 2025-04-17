@@ -43,8 +43,6 @@ spring:
     database-platform: org.hibernate.dialect.SQLServerDialect
 
 # AI AGENT 설정
-# https://slihackathon-2025-pt-02.openai.azure.com/openai/deployments/gpt-4o/chat/completions?api-version=2025-01-01-preview
-# 2b06d118ef874578920ed3dbcbb84064
   ai:
     azure:
       endpoint: https://slihackathon-2025-pt-02.openai.azure.com/
