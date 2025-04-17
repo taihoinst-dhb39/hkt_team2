@@ -1,0 +1,35 @@
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<!--sidebarFragment 선언-->
+<div id="sidebar" th:fragment="sidebarFragment">
+    <h2>
+        <i class="icon-logo"></i>
+        <span class="logo-label">삼성생명 Chat</span>
+    </h2>
+    <div class="search-box">
+        <!--        <input placeholder="Search.." type="text"/>-->
+        <!--        <img alt="검색" class="icon-search" src="/images/icon-search.png"/>-->
+        <label>Assistant 선택: </label>
+        <select name="assistantId" id="assistantSelect">
+            <option th:each="asst : ${assistants}"
+                    th:value="${asst.id}"
+                    th:text="${asst.name}"
+                    th:selected="${asst.id == selectedAssistant}">
+            </option>
+        </select>
+    </div>
+    <div class="menu-item active">
+        <i class="icon-menu1"></i>
+        <span class="menu-label" onclick="location.href='/chat'">매뉴얼 Q&A</span>
+    </div>
+    <!--    <div class="menu-item">-->
+    <!--        <i class="icon-menu2"></i>-->
+    <!--        <span class="menu-label" onclick="location.href='/chatGPT'">GPT Q&A</span>-->
+    <!--    </div>-->
+    <!--    <div class="menu-item">-->
+    <!--        <i class="icon-menu3"></i>-->
+    <!--        <span class="menu-label" onclick="location.href='/chatGemini'">Gemini Q&A</span>-->
+    <!--    </div>-->
+</div>
+
+</html>

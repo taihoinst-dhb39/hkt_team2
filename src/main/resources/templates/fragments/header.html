@@ -1,0 +1,18 @@
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<!-- headerFragment 선언 -->
+<div id="topbar" th:fragment="headerFragment">
+    <button id="toggleSidebar">
+        <i class="icon-folding-menu"></i>
+    </button>
+    <span>AI Chat</span>
+    <div id="topbar-right">
+        <button id="extra-button" th:onclick="@{/chat/new}"><i class="icon-newchat"></i>New Chat</button>
+        <div class="user-info">
+            <i class="icon-user-info"></i>
+            <span>user@samsung.com</span>
+        </div>
+    </div>
+</div>
+
+</html>

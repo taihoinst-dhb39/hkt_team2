@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html layout:decorate="~{layouts/default_layout}"
+      xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+
+<th:block layout:fragment="content">
+    <div id="chat-container"></div>
+
+    <div id="input-area">
+        <div class="input-wrapper" id="frm">
+            <input id="input" name="input" placeholder="Send message..." type="text" value=""/>
+            <button id="send">
+                <i class="icon-menu1"></i>
+            </button>
+        </div>
+    </div>
+</th:block>
+
+<th:block layout:fragment="script-bottom">
+    <script>
+        const chatContainer = document.getElementById('chat-container');
+        const input = document.getElementById('input');
+        const send = document.getElementById('send');
+        const toggleBtn = document.getElementById('toggleSidebar');
+        const sidebar = document.getElementById('sidebar');
+
+        function addMessage(text, sender, id = null) {
+            const message = document.createElement('div');
+            message.classList.add('message', sender);
+            if (id) message.id = id;
+            message.textContent = text;
+            chatContainer.appendChild(message);
+            chatContainer.scrollTop = chatContainer.scrollHeight;
+        }
+
+        function typeBotMessage(text) {
+            const message = document.createElement('div');
+            message.classList.add('message', 'bot');
+            chatContainer.appendChild(message);
+
+            let i = 0;
+
+            function typeChar() {
+                if (i < text.length) {
+                    message.textContent += text.charAt(i);
+                    i++;
+                    setTimeout(typeChar, 30);
+                }
+            }
+
+            typeChar();
+            chatContainer.scrollTop = chatContainer.scrollHeight;
+        }
+
+        function handleSend() {
+            const userMessage = input.value.trim();
+            if (userMessage === "") return;
+
+            const welcome = document.getElementById("welcome-message");
+            if (welcome) welcome.remove();
+
+            addMessage(userMessage, 'user');
+            // input.value = "";
+
+            setTimeout(() => {
+                getBotReply();
+                input.value = "";
+                // typeBotMessage(reply);
+            }, 500);
+        }
+
+        function getBotReply() {
+            let url = "/api/callAzure";
+            let param = {};
+
+            tiHttpSend({
+                category: "api",
+                applyId: "frm",
+                data: param,
+                url: url,
+                success: (result) => {
+                    console.log("success : ", result);
+                    //$("#vertexai").html(result.vertexai.replace(/(?:\r\n|\r|\n)/g, '<br />'));
+                    typeBotMessage(result.vertexai.replace(/(?:\r\n|\r|\n)/g, '<br />'));
+                },
+                error: (result) => {
+                    console.log("error : ", result);
+                    //$("#vertexai").html(result);
+                    typeBotMessage(result);
+                },
+                complete: () => {
+                    console.log("complete!!");
+                }
+            });
+        }
+
+        send.addEventListener('click', handleSend);
+        input.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') handleSend();
+        });
+
+        toggleBtn.addEventListener('click', () => {
+            sidebar.classList.toggle('collapsed');
+        });
+
+        function updateSidebarState() {
+            if (window.innerWidth <= 768) {
+                sidebar.classList.add("collapsed");
+            } else {
+                sidebar.classList.remove("collapsed");
+            }
+        }
+
+        window.addEventListener("resize", updateSidebarState);
+        window.addEventListener("load", () => {
+            updateSidebarState();
+            addMessage("무엇을 도와드릴까요?", "bot", "welcome-message");
+        });
+    </script>
+</th:block>
+
+</html>
