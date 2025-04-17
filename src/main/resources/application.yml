@@ -63,4 +63,3 @@ logging:
     org.apache.hc.client5.http.wire: warn
     org.apache.hc.client5.http: warn
     com.hackathon: debug
-
